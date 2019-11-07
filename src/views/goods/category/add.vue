@@ -29,11 +29,16 @@
       </el-col>
     </el-row>
     <br>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <button type="submit" @click="submit">提交</button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import 'element-ui/lib/theme-chalk/index.css'
+import qs from 'qs'
 export default {
   name: 'Login',
   data() {
@@ -57,8 +62,9 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    submit() {
+      const category = {}
+      this.$request.post('/admin_goods/add_category/', qs.stringify(category))
     }
   }
 }
@@ -113,7 +119,7 @@ $light_gray:#eee;
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 0 auto 40px auto;
       text-align: center;
       font-weight: bold;
     }

@@ -33,35 +33,35 @@
 </template>
 
 <script>
-    import 'element-ui/lib/theme-chalk/index.css'
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                imageUrl: '',
-                cateName: 'a',
-                summary: '',
-                categoryName: '',
-                parentId: 0,
-                radio: 2
-            }
-        },
-        watch: {
-        },
-        created() {
-            // window.addEventListener('storage', this.afterQRScan)
-        },
-        mounted() {
-        },
-        destroyed() {
-            // window.removeEventListener('storage', this.afterQRScan)
-        },
-        methods: {
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw)
-            }
-        }
+import 'element-ui/lib/theme-chalk/index.css'
+export default {
+  name: 'Login',
+  data() {
+    return {
+      imageUrl: '',
+      cateName: 'a',
+      summary: '',
+      categoryName: '',
+      parentId: 0,
+      radio: 2
     }
+  },
+  watch: {
+  },
+  created() {
+    // window.addEventListener('storage', this.afterQRScan)
+  },
+  mounted() {
+  },
+  destroyed() {
+    // window.removeEventListener('storage', this.afterQRScan)
+  },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    }
+  }
+}
 </script>
 
 <style lang="scss">

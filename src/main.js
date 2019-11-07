@@ -42,7 +42,9 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
+import request from '@/utils/myRequset'
 
+Vue.prototype.$request = request
 new Vue({
   el: '#app',
   router,
