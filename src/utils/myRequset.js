@@ -8,8 +8,8 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
-service.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
-service.defaults.withCredentials = true
+service.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
+service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // request interceptor
 service.interceptors.request.use(
   config => {

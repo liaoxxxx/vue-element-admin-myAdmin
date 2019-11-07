@@ -22,7 +22,7 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <label>启用状态</label>
-        <el-radio-group v-model="radio">
+        <el-radio-group id="status" v-model="status">
           <el-radio :label="1">禁用</el-radio>
           <el-radio :label="2">启用</el-radio>
         </el-radio-group>
@@ -31,14 +31,13 @@
     <br>
     <el-row :gutter="20">
       <el-col :span="8">
-        <button type="submit" @click="submit">提交</button>
+        <button type="Primary" @click="submit">提交</button>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import qs from 'qs'
 export default {
   name: 'Login',
   data() {
@@ -46,9 +45,8 @@ export default {
       imageUrl: '',
       cateName: 'a',
       summary: '',
-      categoryName: '',
       parentId: 0,
-      radio: 2
+      status: 2
     }
   },
   watch: {
@@ -63,8 +61,15 @@ export default {
   },
   methods: {
     submit() {
-      const category = {}
-      this.$request.post('/admin_goods/add_category/', qs.stringify(category))
+      const category = {
+        'cateName': this.cateName,
+        'summary': this.summary,
+        'status': this.status,
+        'parent': this.parentId
+      }
+      this.$request.post('/admin_goods/add_category/', category).then((res) => {
+        console.log(res)
+      })
     }
   }
 }
