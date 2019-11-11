@@ -198,7 +198,7 @@ export const asyncRoutes = [
             path: 'dd',
             component: () => import('@/views/goods/goods/add'),
             name: 'Add',
-            meta: { title: '添加a商品' }
+            meta: { title: '添加商品' }
           },
           {
             path: 'edit',
@@ -224,7 +224,7 @@ export const asyncRoutes = [
             path: 'add',
             component: () => import('@/views/goods/category/add'),
             name: 'add',
-            meta: { title: '添加a分类' }
+            meta: { title: '添加分类' }
           },
           {
             path: 'edit',

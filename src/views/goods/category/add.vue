@@ -23,15 +23,15 @@
       <el-col :span="8">
         <label>启用状态</label>
         <el-radio-group id="status" v-model="status">
-          <el-radio :label="1">禁用</el-radio>
-          <el-radio :label="2">启用</el-radio>
+          <el-radio :label="0">禁用</el-radio>
+          <el-radio :label="1">启用</el-radio>
         </el-radio-group>
       </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="8">
-        <button type="Primary" @click="submit">提交</button>
+        <el-button type="primary" @click="submit">提交</el-button>
       </el-col>
     </el-row>
   </div>
@@ -43,10 +43,10 @@ export default {
   data() {
     return {
       imageUrl: '',
-      cateName: 'a',
+      cateName: '',
       summary: '',
       parentId: 0,
-      status: 2
+      status: 1
     }
   },
   watch: {
