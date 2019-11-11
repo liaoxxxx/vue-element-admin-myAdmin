@@ -68,7 +68,19 @@ export default {
         'parent': this.parentId
       }
       this.$request.post('/admin_goods/add_category/', category).then((res) => {
+        res = res.data
         console.log(res)
+        console.log(res.msg)
+        console.log(res.data)
+        console.log(res.data.cateName)
+
+        if (res.msg === 'success') {
+          this.$notify({
+            title: '成功',
+            message: '分类' + res.data.cateName + '添加成功',
+            type: 'success'
+          })
+        }
       })
     }
   }
