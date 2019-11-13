@@ -10,19 +10,32 @@
       <el-table-column
         sortable
         type="selection"
+        prop="id"
+        width="55"
+      />
+      <el-table-column
+        sortable
+        label="id"
+        prop="id"
         width="55"
       />
       <el-table-column
         sortable
         label="分类名称"
         prop="cateName"
+        width="160"
+      />
+      <el-table-column
+        sortable
+        label="状态"
         width="120"
+        prop="status"
       >
       </el-table-column>
       <el-table-column
         sortable
         label="描述"
-        width="120"
+        width="240"
         prop="summary"
       >
       </el-table-column>
@@ -39,6 +52,21 @@
         width="150"
         prop="updateAtStr"
       >
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="180">
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            type="text"
+            size="small">
+            启用
+          </el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+          <el-button type="text" size="small">编辑</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <div class="block">
