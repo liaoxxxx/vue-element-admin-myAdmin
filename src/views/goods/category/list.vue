@@ -30,14 +30,14 @@
         sortable
         label="创建日期"
         width="150"
-        prop="created_at"
+        prop="createdAtStr"
       >
       </el-table-column>
       <el-table-column
         sortable
         label="修改日期"
         width="150"
-        prop="updated_at"
+        prop="updateAtStr"
       >
       </el-table-column>
     </el-table>
