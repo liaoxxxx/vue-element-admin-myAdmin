@@ -3,53 +3,78 @@
     <h2>添加产品分类</h2>
     <el-row :gutter="20">
       <el-col :span="8">
-        <label for="cateName">商品分类名称</label><el-input id="cateName" v-model="cateName" placeholder="请输入分类名称" />
+        <label for="cateName">分类id</label><br><el-input id="id" v-model="id" placeholder="请输入分类名称" />
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <label for="cateName">商品分类名称</label><br><el-input id="cateName" v-model="cateName" placeholder="请输入分类名称" />
       </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="8">
-        <label for="summary">商品分类备注</label><el-input id="summary" v-model="summary" placeholder="请输入分类备注" />
+        <label for="summary">商品分类备注</label><br><el-input id="summary" v-model="summary" placeholder="请输入分类备注" />
       </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="8">
-        <label for="parentId">选择父级分类</label><el-input id="parentId" v-model="parentId" placeholder="请选择父级分类" />
+        <label for="parentId">选择父级分类</label><br><el-input id="parentId" v-model="parentId" placeholder="请选择父级分类" />
       </el-col>
     </el-row>
     <br>
     <el-row :gutter="20">
       <el-col :span="8">
         <label>启用状态</label>
-        <el-radio-group v-model="radio">
-          <el-radio :label="1">禁用</el-radio>
-          <el-radio :label="2">启用</el-radio>
+        <el-radio-group id="status" v-model="status">
+          <el-radio :label="0">禁用</el-radio>
+          <el-radio :label="1">启用</el-radio>
         </el-radio-group>
       </el-col>
     </el-row>
     <br>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-button type="primary" @click="submit">提交修改</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import 'element-ui/lib/theme-chalk/index.css'
 export default {
-  name: 'Login',
+  name: 'EditGoodsCategory',
   data() {
     return {
-      imageUrl: '',
-      cateName: 'a',
+      id: 0,
+      cateName: '',
       summary: '',
-      categoryName: '',
       parentId: 0,
-      radio: 2
+      status: 1
     }
   },
   watch: {
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    const id = this.$route.query.id
+    if (id > 0) {
+      this.$request.post('/admin_goods/get_category_by_id/', { 'id': id }).then((res) => {
+        res = res.data
+        const data = res.data
+        console.log(res)
+        console.log(res.data.cateName)
+
+        if (res.status === 'success') {
+          this.cateName = data.cateName
+          console.log(data)
+          this.id = data.id
+          this.parentId = data.parentId
+          this.summary = data.summary
+          this.status = data.status
+        }
+      })
+    }
   },
   mounted() {
   },
@@ -57,8 +82,47 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    submit() {
+      const category = {
+        'cateName': this.cateName,
+        'summary': this.summary,
+        'status': this.status,
+        'parent': this.parentId
+      }
+      this.$request.post('/admin_goods/edit_category/', category).then((res) => {
+        res = res.data
+        console.log(res)
+        console.log(res.msg)
+        console.log(res.data)
+        console.log(res.data.cateName)
+
+        if (res.msg === 'success') {
+          this.$notify({
+            title: '成功',
+            message: '分类' + res.data.cateName + '修改成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    getCategory(id) {
+      if (id > 0) {
+        this.$request.post('/admin_goods/get_category_by_id/', { 'id': id }).then((res) => {
+          res = res.data
+          const data = res.data
+          console.log(res)
+          console.log(res.data.cateName)
+
+          if (res.status === 'success') {
+            this.cateName = data.cateName
+            console.log(data)
+            this.id = data.id
+            this.parentId = data.parentId
+            this.summary = data.summary
+            this.status = data.status
+          }
+        })
+      }
     }
   }
 }
@@ -113,7 +177,7 @@ export default {
       .title {
         font-size: 26px;
         color: $light_gray;
-        margin: 0px auto 40px auto;
+        margin: 0 auto 40px auto;
         text-align: center;
         font-weight: bold;
       }
