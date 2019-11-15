@@ -3,7 +3,7 @@
     <h2>添加产品分类</h2>
     <el-row :gutter="20">
       <el-col :span="8">
-        <label for="cateName">分类id</label><br><el-input id="id" v-model="id" placeholder="请输入分类名称" />
+        <label for="cateName">分类id</label><br><el-input id="id" v-model="id" :disabled="true" placeholder="请输入分类名称" />
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -58,6 +58,15 @@ export default {
   },
   created() {
     const id = this.$route.query.id
+    console.log(id)
+    if (id === undefined || id === 0) {
+      this.$notify({
+        title: '出错了',
+        message: '分类id错误',
+        type: 'error'
+      })
+      this.$router.push({ path: '/goods/category/list', query: { }})
+    }
     if (id > 0) {
       this.$request.post('/admin_goods/get_category_by_id/', { 'id': id }).then((res) => {
         res = res.data
@@ -84,10 +93,11 @@ export default {
   methods: {
     submit() {
       const category = {
+        'id': this.id,
         'cateName': this.cateName,
         'summary': this.summary,
         'status': this.status,
-        'parent': this.parentId
+        'parentId': this.parentId
       }
       this.$request.post('/admin_goods/edit_category/', category).then((res) => {
         res = res.data
@@ -96,7 +106,7 @@ export default {
         console.log(res.data)
         console.log(res.data.cateName)
 
-        if (res.msg === 'success') {
+        if (res.status === 'success') {
           this.$notify({
             title: '成功',
             message: '分类' + res.data.cateName + '修改成功',
