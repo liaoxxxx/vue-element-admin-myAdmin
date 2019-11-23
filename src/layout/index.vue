@@ -1,3 +1,4 @@
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=cfe3ee5025c2e78dfc695e60a931fa11"></script>
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />

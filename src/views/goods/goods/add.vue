@@ -1,34 +1,68 @@
 <template>
   <div class="add-category-container">
-    <h2>添加产品分类</h2>
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <label for="cateName">商品名称</label><el-input id="cateName" v-model="cateName" placeholder="请输入商品名称" />
-      </el-col>
-    </el-row>
-    <br>
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <label for="summary">商品备注</label><el-input id="summary" v-model="summary" placeholder="请输入商品备注" />
-      </el-col>
-    </el-row>
-    <br>
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <label for="parentId">选择商品分类</label><el-input id="parentId" v-model="parentId" placeholder="请选择商品分类" />
-      </el-col>
-    </el-row>
-    <br>
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <label>上架状态</label>
-        <el-radio-group id="status" v-model="status">
-          <el-radio :label="0">下架</el-radio>
-          <el-radio :label="1">上架</el-radio>
-        </el-radio-group>
-      </el-col>
-    </el-row>
-    <br>
+    <h2>添加产品</h2>
+    <div v-show="showInfoGroup" id="goods-info-group">
+      <h3>商品摘要</h3>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="Name">商品名称</label><el-input id="Name" v-model="Name" placeholder="请输入商品名称" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="title">商品标题</label><el-input id="title" v-model="title" placeholder="请输入商品名称" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="subTitle">商品副标题</label><el-input id="subTitle" v-model="subTitle" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="summary">商品备注</label><el-input id="summary" v-model="summary" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="parentId">选择商品分类</label><el-input id="parentId" v-model="parentId" placeholder="请选择商品分类" />
+        </el-col>
+      </el-row>
+      <br>
+    </div>
+    <div v-show="showPriceGroup" id="goods-price-group">
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="basePrice">商品底价</label><el-input id="basePrice" v-model="summary" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="showPrice">商品标价</label><el-input id="showPrice" v-model="showPrice" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="inputPrice">商品成本</label><el-input id="inputPrice" v-model="inputPrice" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label>上架状态</label>
+          <el-radio-group id="status" v-model="status">
+            <el-radio :label="0">下架</el-radio>
+            <el-radio :label="1">上架</el-radio>
+          </el-radio-group>
+        </el-col>
+      </el-row>
+      <br>
+    </div>
     <el-row :gutter="20">
       <el-col :span="8">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -42,6 +76,8 @@ export default {
   name: 'Login',
   data() {
     return {
+      showInfoGroup: true,
+      showPriceGroup: false,
       imageUrl: '',
       cateName: '',
       summary: '',
