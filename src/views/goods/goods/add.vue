@@ -5,50 +5,51 @@
       <h3>商品摘要</h3>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="Name">商品名称</label><el-input id="Name" v-model="Name" placeholder="请输入商品名称" />
+          <label for="Name">商品名称:</label><el-input id="Name" v-model="Name" placeholder="请输入商品名称" />
         </el-col>
       </el-row>
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="title">商品标题</label><el-input id="title" v-model="title" placeholder="请输入商品名称" />
+          <label for="title">商品标题:</label><el-input id="title" v-model="title" placeholder="请输入商品名称" />
         </el-col>
       </el-row>
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="subTitle">商品副标题</label><el-input id="subTitle" v-model="subTitle" placeholder="请输入商品备注" />
+          <label for="subTitle">商品副标题:</label><el-input id="subTitle" v-model="subTitle" placeholder="请输入商品备注" />
         </el-col>
       </el-row>
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="summary">商品备注</label><el-input id="summary" v-model="summary" placeholder="请输入商品备注" />
+          <label for="summary">商品备注:</label><el-input id="summary" v-model="summary" placeholder="请输入商品备注" />
         </el-col>
       </el-row>
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="parentId">选择商品分类</label><el-input id="parentId" v-model="parentId" placeholder="请选择商品分类" />
+          <label for="cateId">选择商品分类:</label><el-input id="cateId" v-model="cateId" placeholder="请选择商品分类" />
         </el-col>
       </el-row>
       <br>
     </div>
-    <div v-show="showPriceGroup" id="goods-price-group">
+    <div v-show="!showInfoGroup" id="goods-price-group">
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="basePrice">商品底价</label><el-input id="basePrice" v-model="summary" placeholder="请输入商品备注" />
+          <label for="basePrice">商品底价:</label><el-input id="basePrice" v-model="basePrice" placeholder="请输入商品备注" />
         </el-col>
       </el-row>
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="showPrice">商品标价</label><el-input id="showPrice" v-model="showPrice" placeholder="请输入商品备注" />
+          <label for="showPrice">商品标价:</label><el-input id="showPrice" v-model="showPrice" placeholder="请输入商品备注" />
         </el-col>
       </el-row>
+      <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="inputPrice">商品成本</label><el-input id="inputPrice" v-model="inputPrice" placeholder="请输入商品备注" />
+          <label for="inputPrice">商品成本:</label><el-input id="inputPrice" v-model="inputPrice" placeholder="请输入商品备注" />
         </el-col>
       </el-row>
       <br>
@@ -64,7 +65,13 @@
       <br>
     </div>
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col v-show="!showInfoGroup" :span="2">
+        <el-button type="primary" @click="switchInputGroups">上一步</el-button>
+      </el-col>
+      <el-col v-show="showInfoGroup" :span="2">
+        <el-button type="primary" @click="switchInputGroups">下一步</el-button>
+      </el-col>
+      <el-col v-show="!showInfoGroup" :span="8">
         <el-button type="primary" @click="submit">提交</el-button>
       </el-col>
     </el-row>
@@ -77,12 +84,17 @@ export default {
   data() {
     return {
       showInfoGroup: true,
-      showPriceGroup: false,
       imageUrl: '',
-      cateName: '',
+      name: '',
+      cateId: '',
       summary: '',
+      title: '',
+      subTitle: '',
       parentId: 0,
-      status: 1
+      status: 1,
+      basePrice: 0,
+      inputPrice: 0,
+      showPrice: 0
     }
   },
   watch: {
@@ -96,6 +108,13 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    switchInputGroups() {
+      if (this.showInfoGroup === true) {
+        this.showInfoGroup = false
+      } else {
+        this.showInfoGroup = true
+      }
+    },
     submit() {
       const category = {
         'cateName': this.cateName,
@@ -103,7 +122,7 @@ export default {
         'status': this.status,
         'parent': this.parentId
       }
-      this.$request.post('/admin_goods/add_category/', category).then((res) => {
+      this.$request.post('/admin_goods/add_goods/', category).then((res) => {
         res = res.data
         console.log(res)
         console.log(res.msg)
