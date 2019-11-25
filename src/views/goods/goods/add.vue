@@ -33,6 +33,23 @@
         </el-col>
       </el-row>
       <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-upload
+            :action="thumbPostUrl"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            name="goodsThumb"
+          >
+            <i class="el-icon-plus" />
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+        </el-col>
+      </el-row>
+      <br>
     </div>
     <div v-show="!showInfoGroup" id="goods-price-group">
       <el-row :gutter="20">
@@ -80,11 +97,13 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'AddGoods',
   data() {
     return {
       showInfoGroup: true,
-      imageUrl: '',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      thumbPostUrl: 'http://localhost:8081/admin_goods/upload_thumb',
       name: '',
       cateId: '',
       summary: '',
@@ -137,6 +156,13 @@ export default {
           })
         }
       })
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
   }
 }
