@@ -5,7 +5,7 @@
       <h3>商品摘要</h3>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label for="Name">商品名称:</label><el-input id="Name" v-model="Name" placeholder="请输入商品名称" />
+          <label for="Name">商品名称:</label><el-input id="Name" v-model="name" placeholder="请输入商品名称" />
         </el-col>
       </el-row>
       <br>
@@ -35,12 +35,13 @@
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
+          <label >选择缩略图</label>
           <el-upload
             :action="thumbPostUrl"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            name="goodsThumb"
+            name="file"
           >
             <i class="el-icon-plus" />
           </el-upload>
@@ -103,7 +104,7 @@ export default {
       showInfoGroup: true,
       dialogImageUrl: '',
       dialogVisible: false,
-      thumbPostUrl: 'http://localhost:8081/admin_goods/upload_thumb',
+      thumbPostUrl: 'http://localhost:8081/upload/singleImage',
       name: '',
       cateId: '',
       summary: '',
