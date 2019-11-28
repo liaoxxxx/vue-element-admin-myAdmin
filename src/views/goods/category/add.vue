@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'AddGoodCategory',
   data() {
     return {
       imageUrl: '',
@@ -65,7 +65,7 @@ export default {
         'cateName': this.cateName,
         'summary': this.summary,
         'status': this.status,
-        'parent': this.parentId
+        'parentId': this.parentId
       }
       this.$request.post('/admin_goods/add_category/', category).then((res) => {
         res = res.data
