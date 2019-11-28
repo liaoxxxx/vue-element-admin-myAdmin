@@ -73,8 +73,7 @@ export default {
         console.log(res.msg)
         console.log(res.data)
         console.log(res.data.cateName)
-
-        if (res.msg === 'success') {
+        if (res.status === 1) {
           this.$notify({
             title: '成功',
             message: '分类' + res.data.cateName + '添加成功',
