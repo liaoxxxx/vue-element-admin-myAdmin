@@ -68,7 +68,7 @@
     </el-table>
     <div class="block">
       <el-pagination
-        :current-page="currentPage4"
+        :current-page="currentPage"
         :page-sizes="[100, 200, 300, 400]"
         :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
@@ -94,11 +94,9 @@ export default {
   created() {
     this.$request.get('/admin_goods/get_all_category').then((res) => {
       res = res.data
-      if (res.status === 'success') {
-        console.log('aaaa')
+      console.log(res)
+      if (res.status === 1) {
         this.tableData = res.data
-        console.log(this.tableData)
-        console.log(typeof this.tableData)
       }
     })
   },
@@ -112,9 +110,6 @@ export default {
       this.$router.push({ path: '/goods/category/edit', query: { id: id }})
     },
     delete(id) {
-      console.log(id)
-    },
-    switchStatus(id) {
       console.log(id)
     },
     handleSelectionChange() {
