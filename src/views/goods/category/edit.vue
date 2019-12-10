@@ -74,7 +74,7 @@ export default {
         console.log(res)
         console.log(res.data.cateName)
 
-        if (res.status === 'success') {
+        if (res.status === 1) {
           this.cateName = data.cateName
           console.log(data)
           this.id = data.id
@@ -106,7 +106,7 @@ export default {
         console.log(res.data)
         console.log(res.data.cateName)
 
-        if (res.status === 'success') {
+        if (res.status === 1) {
           this.$notify({
             title: '成功',
             message: '分类' + res.data.cateName + '修改成功',
@@ -123,7 +123,7 @@ export default {
           console.log(res)
           console.log(res.data.cateName)
 
-          if (res.status === 'success') {
+          if (res.status === 1) {
             this.cateName = data.cateName
             console.log(data)
             this.id = data.id
