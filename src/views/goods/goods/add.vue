@@ -35,7 +35,7 @@
       <br>
       <el-row :gutter="20">
         <el-col :span="8">
-          <label >选择缩略图</label>
+          <label>选择缩略图</label>
           <el-upload
             :action="thumbPostUrl"
             list-type="picture-card"
@@ -110,7 +110,6 @@ export default {
       summary: '',
       title: '',
       subTitle: '',
-      parentId: 0,
       status: 1,
       basePrice: 0,
       inputPrice: 0,
@@ -137,10 +136,15 @@ export default {
     },
     submit() {
       const category = {
-        'cateName': this.cateName,
+        'name': this.name,
+        'cateId': this.cateId,
         'summary': this.summary,
+        'title': this.title,
+        'subTitle': this.subTitle,
         'status': this.status,
-        'parent': this.parentId
+        'basePrice': this.basePrice,
+        'inputPrice': this.inputPrice,
+        'showPrice': this.showPrice
       }
       this.$request.post('/admin_goods/add_goods/', category).then((res) => {
         res = res.data
