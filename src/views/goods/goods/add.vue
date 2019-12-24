@@ -136,17 +136,20 @@ export default {
       }
     },
     submit() {
+      // eslint-disable-next-line no-unused-vars
       const images = []
-      this.uploadFileList.every(function(index, item) {
-        images.push(item.response.path)
+      this.uploadFileList.every(function(item, index) {
+        images.push(item.response.data.path)
       })
-
+      return
+      // eslint-disable-next-line no-unreachable
       const category = {
         'name': this.name,
         'cateId': this.cateId,
         'summary': this.summary,
         'title': this.title,
         'subTitle': this.subTitle,
+        'images': images,
         'status': this.status,
         'basePrice': this.basePrice,
         'inputPrice': this.inputPrice,
