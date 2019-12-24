@@ -41,13 +41,12 @@
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :on-change="uploadChange"
+            :multiple="uploadMultiple"
             name="file"
           >
             <i class="el-icon-plus" />
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
         </el-col>
       </el-row>
       <br>
@@ -104,7 +103,6 @@ export default {
       showInfoGroup: true,
       dialogImageUrl: '',
       dialogVisible: false,
-      thumbPostUrl: 'http://localhost:8081/upload/singleImage',
       name: '',
       cateId: '',
       summary: '',
@@ -113,7 +111,10 @@ export default {
       status: 1,
       basePrice: 0,
       inputPrice: 0,
-      showPrice: 0
+      showPrice: 0,
+      uploadFileList: [],
+      uploadMultiple: true,
+      thumbPostUrl: 'http://localhost:8081/upload/singleImage'
     }
   },
   watch: {
@@ -135,6 +136,11 @@ export default {
       }
     },
     submit() {
+      const images = []
+      this.uploadFileList.every(function(index, item) {
+        images.push(item.response.path)
+      })
+
       const category = {
         'name': this.name,
         'cateId': this.cateId,
@@ -163,11 +169,15 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      console.log(fileList)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    uploadChange(file, fileList) {
+      this.uploadFileList = fileList
+      console.log(this.uploadFileList)
     }
   }
 }
