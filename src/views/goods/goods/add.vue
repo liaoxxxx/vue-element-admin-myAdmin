@@ -138,10 +138,10 @@ export default {
     submit() {
       // eslint-disable-next-line no-unused-vars
       const images = []
-      this.uploadFileList.every(function(item, index) {
-        images.push(item.response.data.path)
-      })
-      return
+      for (let i = 0; i < this.uploadFileList.length; i++) {
+        images[i] = this.uploadFileList[i].response.data.path
+      }
+      console.log(images)
       // eslint-disable-next-line no-unreachable
       const category = {
         'name': this.name,
@@ -160,12 +160,10 @@ export default {
         console.log(res)
         console.log(res.msg)
         console.log(res.data)
-        console.log(res.data.cateName)
-
-        if (res.msg === 'success') {
+        if (res.status === 1) {
           this.$notify({
             title: '成功',
-            message: '分类' + res.data.cateName + '添加成功',
+            message: res.message,
             type: 'success'
           })
         }
