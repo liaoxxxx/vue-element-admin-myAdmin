@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     edit(id) {
-      this.$router.push({ path: '/goods/category/edit', query: { id: id }})
+      this.$router.push({ path: '/goods/goods/edit', query: { id: id }})
     },
     delete(id) {
       console.log(id)

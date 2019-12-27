@@ -1,261 +1,292 @@
 <template>
-  <div class="login-container">
-    <h1>goods edit</h1>
+  <div class="add-category-container">
+    <h2>添加产品</h2>
+    <div v-show="showInfoGroup" id="goods-info-group">
+      <h3>商品摘要</h3>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="Name">商品名称:</label><el-input id="Name" v-model="name" placeholder="请输入商品名称" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="title">商品标题:</label><el-input id="title" v-model="title" placeholder="请输入商品名称" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="subTitle">商品副标题:</label><el-input id="subTitle" v-model="subTitle" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="summary">商品备注:</label><el-input id="summary" v-model="summary" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="cateId">选择商品分类:</label><el-input id="cateId" v-model="cateId" placeholder="请选择商品分类" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label>选择缩略图</label>
+          <el-upload
+            :action="thumbPostUrl"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-change="uploadChange"
+            :multiple="uploadMultiple"
+            name="file"
+          >
+            <i class="el-icon-plus" />
+          </el-upload>
+        </el-col>
+      </el-row>
+      <br>
+    </div>
+    <div v-show="!showInfoGroup" id="goods-price-group">
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="basePrice">商品底价:</label><el-input id="basePrice" v-model="basePrice" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="showPrice">商品标价:</label><el-input id="showPrice" v-model="showPrice" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label for="inputPrice">商品成本:</label><el-input id="inputPrice" v-model="inputPrice" placeholder="请输入商品备注" />
+        </el-col>
+      </el-row>
+      <br>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <label>上架状态</label>
+          <el-radio-group id="status" v-model="status">
+            <el-radio :label="0">下架</el-radio>
+            <el-radio :label="1">上架</el-radio>
+          </el-radio-group>
+        </el-col>
+      </el-row>
+      <br>
+    </div>
+    <el-row :gutter="20">
+      <el-col v-show="!showInfoGroup" :span="2">
+        <el-button type="primary" @click="switchInputGroups">上一步</el-button>
+      </el-col>
+      <el-col v-show="showInfoGroup" :span="2">
+        <el-button type="primary" @click="switchInputGroups">下一步</el-button>
+      </el-col>
+      <el-col v-show="!showInfoGroup" :span="8">
+        <el-button type="primary" @click="submit">提交</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
 export default {
-  name: 'Login',
+  name: 'AddGoods',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
-      passwordType: 'password',
-      capsTooltip: false,
-      loading: false,
-      showDialog: false,
-      redirect: undefined,
-      otherQuery: {}
+      showInfoGroup: true,
+      dialogImageUrl: '',
+      dialogVisible: false,
+      name: '',
+      cateId: '',
+      summary: '',
+      title: '',
+      subTitle: '',
+      status: 0,
+      basePrice: 0,
+      inputPrice: 0,
+      showPrice: 0,
+      uploadFileList: [],
+      uploadMultiple: true,
+      thumbPostUrl: 'http://localhost:8081/upload/singleImage'
     }
   },
   watch: {
-    $route: {
-      handler: function(route) {
-        const query = route.query
-        if (query) {
-          this.redirect = query.redirect
-          this.otherQuery = this.getOtherQuery(query)
-        }
-      },
-      immediate: true
-    }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    const id = this.$route.query.id
+    console.log(id)
+    if (id === undefined || id === 0) {
+      this.$notify({
+        title: '出错了',
+        message: '分类id错误',
+        type: 'error'
+      })
+      this.$router.push({ path: '/goods/category/list', query: { }})
+    }
+    if (id > 0) {
+      this.$request.post('/admin_goods/findone/', { 'id': id }).then((res) => {
+        res = res.data
+        const data = res.data
+        console.log(res)
+
+        if (res.status === 1) {
+          this.name = data.name
+          console.log(data)
+          this.id = data.id
+          this.cateId = data.cate
+          this.summary = data.summary
+          this.title = data.title
+          this.subTitle = data.subTitle
+          this.status = data.status
+        }
+      })
+    }
   },
   mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
-    }
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    checkCapslock({ shiftKey, key } = {}) {
-      if (key && key.length === 1) {
-        if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
-          this.capsTooltip = true
-        } else {
-          this.capsTooltip = false
-        }
-      }
-      if (key === 'CapsLock' && this.capsTooltip === true) {
-        this.capsTooltip = false
-      }
-    },
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+    switchInputGroups() {
+      if (this.showInfoGroup === true) {
+        this.showInfoGroup = false
       } else {
-        this.passwordType = 'password'
+        this.showInfoGroup = true
       }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
+    submit() {
+      // eslint-disable-next-line no-unused-vars
+      const images = []
+      for (let i = 0; i < this.uploadFileList.length; i++) {
+        images[i] = this.uploadFileList[i].response.data.path
+      }
+      console.log(images)
+      // eslint-disable-next-line no-unreachable
+      const category = {
+        'name': this.name,
+        'cateId': this.cateId,
+        'summary': this.summary,
+        'title': this.title,
+        'subTitle': this.subTitle,
+        'images': images,
+        'status': this.status,
+        'basePrice': this.basePrice,
+        'inputPrice': this.inputPrice,
+        'showPrice': this.showPrice
+      }
+      this.$request.post('/admin_goods/add_goods/', category).then((res) => {
+        res = res.data
+        console.log(res)
+        console.log(res.msg)
+        console.log(res.data)
+        if (res.status === 1) {
+          this.$notify({
+            title: '成功',
+            message: res.message,
+            type: 'success'
+          })
         }
       })
     },
-    getOtherQuery(query) {
-      return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== 'redirect') {
-          acc[cur] = query[cur]
-        }
-        return acc
-      }, {})
+    handleRemove(file, fileList) {
+      console.log(fileList)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    uploadChange(file, fileList) {
+      console.log(fileList)
+      this.uploadFileList = fileList
+      console.log(this.uploadFileList)
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+  $bg:#2d3a4b;
+  $dark_gray:#889aa4;
+  $light_gray:#eee;
 
-.login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
-
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+  .login-container {
+    min-height: 100%;
+    width: 100%;
+    background-color: $bg;
     overflow: hidden;
-  }
 
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+    .login-form {
+      position: relative;
+      width: 520px;
+      max-width: 100%;
+      padding: 160px 35px 0;
+      margin: 0 auto;
+      overflow: hidden;
+    }
 
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+
+      span {
+        &:first-of-type {
+          margin-right: 16px;
+        }
+      }
+    }
+
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $dark_gray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
+    }
+
+    .title-container {
+      position: relative;
+
+      .title {
+        font-size: 26px;
+        color: $light_gray;
+        margin: 0 auto 40px auto;
+        text-align: center;
+        font-weight: bold;
+      }
+    }
+
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: $dark_gray;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .thirdparty-button {
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+    }
+
+    @media only screen and (max-width: 470px) {
+      .thirdparty-button {
+        display: none;
       }
     }
   }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
-
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
-
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
-    }
-  }
-}
 </style>

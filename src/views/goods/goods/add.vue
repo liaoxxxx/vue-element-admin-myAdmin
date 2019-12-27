@@ -177,6 +177,7 @@ export default {
       this.dialogVisible = true
     },
     uploadChange(file, fileList) {
+      console.log(fileList)
       this.uploadFileList = fileList
       console.log(this.uploadFileList)
     }
