@@ -43,6 +43,7 @@
             :on-remove="handleRemove"
             :on-change="uploadChange"
             :multiple="uploadMultiple"
+            :file-list="uploadFileList"
             name="file"
           >
             <i class="el-icon-plus" />
@@ -120,8 +121,9 @@ export default {
   watch: {
   },
   created() {
+    // console.log(this.$request.defaults.headers)
     const id = this.$route.query.id
-    console.log(id)
+    // console.log(id)
     if (id === undefined || id === 0) {
       this.$notify({
         title: '出错了',
@@ -131,20 +133,30 @@ export default {
       this.$router.push({ path: '/goods/category/list', query: { }})
     }
     if (id > 0) {
-      this.$request.post('/admin_goods/findone/', { 'id': id }).then((res) => {
+      this.$request.get('/admin_goods/findone/' + id).then((res) => {
         res = res.data
         const data = res.data
-        console.log(res)
+        //  console.log(res)
 
         if (res.status === 1) {
           this.name = data.name
-          console.log(data)
+          // console.log(data)
           this.id = data.id
-          this.cateId = data.cate
+          this.cateId = data.cateId
           this.summary = data.summary
           this.title = data.title
           this.subTitle = data.subTitle
           this.status = data.status
+          this.inputPrice = data.inputPrice
+          this.basePrice = data.basePrice
+          this.showPrice = data.showPrice
+          //  json.decode
+          const images = JSON.parse(data.images)
+          const FileList = []
+          images.forEach(function(item, index) {
+            FileList[index] = { 'url': item }
+          })
+          this.uploadFileList = FileList
         }
       })
     }

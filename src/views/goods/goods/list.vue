@@ -116,6 +116,7 @@ export default {
   watch: {
   },
   created() {
+    console.log(this.$request.defaults.headers)
     this.$request.get('/admin_goods/goods_list').then((res) => {
       res = res.data
       console.log(res)
