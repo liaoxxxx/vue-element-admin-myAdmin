@@ -239,6 +239,19 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/websocket',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/websocket/index'),
+        name: 'websocket',
+        meta: { title: 'websocket', icon: 'tab' }
+      }
+    ]
+  },
+
+  {
     path: '/icon',
     component: Layout,
     children: [
