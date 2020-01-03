@@ -241,12 +241,23 @@ export const asyncRoutes = [
   {
     path: '/websocket',
     component: Layout,
+    name: 'WebSocket',
+    meta: {
+      title: 'websocket',
+      icon: 'tab'
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/websocket/index'),
         name: 'websocket',
-        meta: { title: 'websocket', icon: 'tab' }
+        meta: { title: 'websocket_spring', icon: 'tab' }
+      },
+      {
+        path: 'websocket',
+        component: () => import('@/views/websocket/test'),
+        name: 'Icons',
+        meta: { title: 'websocket_swoft', icon: 'tab', noCache: true }
       }
     ]
   },
