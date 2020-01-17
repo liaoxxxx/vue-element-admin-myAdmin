@@ -44,18 +44,39 @@ const actions = {
     })
   },
 
+  loginByUsername({ commit }, userInfo) {
+    console.log('----------')
+    const username = userInfo.username.trim()
+    console.log(username)
+
+    function loginByUsername(username, password) {
+      console.log()
+    }
+
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-undef
+      loginByUsername(username, userInfo.password).then(response => {
+        const data = response.data
+        // eslint-disable-next-line no-undef
+        Cookies.set('Token', response.data.token) // 登录成功后将token存储在cookie之中
+        commit('SET_TOKEN', data.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
+        console.log(data)
         const { roles, name, avatar, introduction } = data
-
+        console.log(roles)
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')

@@ -164,14 +164,12 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
+          this.$store.dispatch('user/loginByUsername', this.loginForm)
             .then(() => {
-              console.log(99999)
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path: '/' })
               this.loading = false
             })
             .catch(() => {
-              console.log(8888)
               this.loading = false
             })
         } else {
