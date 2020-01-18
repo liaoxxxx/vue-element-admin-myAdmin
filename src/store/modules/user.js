@@ -31,35 +31,14 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
+    console.log({ commit })
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
+        console.log({ data })
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  loginByUsername({ commit }, userInfo) {
-    console.log('----------')
-    const username = userInfo.username.trim()
-    console.log(username)
-
-    function loginByUsername(username, password) {
-      console.log()
-    }
-
-    return new Promise((resolve, reject) => {
-      // eslint-disable-next-line no-undef
-      loginByUsername(username, userInfo.password).then(response => {
-        const data = response.data
-        // eslint-disable-next-line no-undef
-        Cookies.set('Token', response.data.token) // 登录成功后将token存储在cookie之中
-        commit('SET_TOKEN', data.token)
         resolve()
       }).catch(error => {
         reject(error)
