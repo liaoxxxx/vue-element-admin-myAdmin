@@ -73,6 +73,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
+    // eslint-disable-next-line no-undef
     Message({
       message: error.message,
       type: 'error',
@@ -82,4 +83,5 @@ service.interceptors.response.use(
   }
 )
 
+console.log(service)
 export default service

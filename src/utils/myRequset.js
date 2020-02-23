@@ -38,6 +38,6 @@ service.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-console.log(service.defaults.headers)
+// console.log(service.defaults.headers)
 
 export default service

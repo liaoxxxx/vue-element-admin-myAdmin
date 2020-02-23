@@ -31,12 +31,13 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    console.log({ commit })
+    /* console.log({ commit })*/
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        console.log({ data })
+        const { data } = response.data
+        /* console.log('----------------')
+        console.log(data)*/
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -54,7 +55,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
         console.log(data)
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction } = data.data
         console.log(roles)
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -109,7 +110,6 @@ const actions = {
 
       commit('SET_TOKEN', token)
       setToken(token)
-
       const { roles } = await dispatch('getInfo')
 
       resetRouter()

@@ -45,9 +45,11 @@ Vue.config.productionTip = false
 import request from '@/utils/myRequset'
 
 Vue.prototype.$request = request
-new Vue({
+const theVue = new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
 })
+
+console.log(theVue)

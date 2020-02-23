@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">Login Form</h3>
@@ -125,7 +125,7 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
     if (this.loginForm.username === '') {
@@ -135,7 +135,7 @@ export default {
     }
   },
   destroyed() {
-    // window.removeEventListener('storage', this.afterQRScan)
+    window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
     checkCapslock({ shiftKey, key } = {}) {
@@ -162,6 +162,7 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        console.log(valid)
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
@@ -185,25 +186,26 @@ export default {
         }
         return acc
       }, {})
+    },
+    afterQRScan(e) {
+      if (e.key === 'x-admin-oauth-code') {
+        // eslint-disable-next-line no-undef
+        const code = getQueryObject(e.newValue)
+        const codeMap = {
+          wechat: 'code',
+          tencent: 'code'
+        }
+        const type = codeMap[this.auth_type]
+        const codeName = code[type]
+        if (codeName) {
+          this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+          })
+        } else {
+          alert('第三方登录失败')
+        }
+      }
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
